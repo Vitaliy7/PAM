@@ -1,0 +1,44 @@
+---
+- name: Create users & group
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Add group
+    group:
+      name: admin
+ 
+  - name: Add user otus
+    user:
+     name: otus
+     password: $6$PdtyJV5HW8QKb3gu$uJncbg5OBXmKO0GX2chO/MJxlAbWx87EzZHlSsQ9ZACtuJbZTTCMq9wp4MlESVDixxPacn6Uhejfpi/63Dq0L1
+     append: yes
+     
+  - name: Add user otusadm
+    user:
+     name: otusadm
+     groups: admin
+     password: $6$PdtyJV5HW8QKb3gu$uJncbg5OBXmKO0GX2chO/MJxlAbWx87EzZHlSsQ9ZACtuJbZTTCMq9wp4MlESVDixxPacn6Uhejfpi/63Dq0L1
+     append: yes
+     
+  - name: Add user root to group admin
+    user:
+      name: root
+      groups: admin
+      
+  - name: Add user vagrant to group admin
+    user:
+      name: vagrant
+      groups: admin
+      
+  - name: Copy script
+    copy:
+      src: /home/vitaliy7/otus/users_and_groups/login.sh
+      dest: /usr/local/bin/login.sh
+      mode: 0755
+      
+  - name: Copy sshd
+    copy:
+      src: /home/vitaliy7/otus/users_and_groups/sshd
+      dest: /etc/pam.d/sshd      
